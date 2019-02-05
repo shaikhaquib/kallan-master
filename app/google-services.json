@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "69136212157",
+    "firebase_url": "https://kellan-88b32.firebaseio.com",
+    "project_id": "kellan-88b32",
+    "storage_bucket": "kellan-88b32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69136212157:android:7064b9a6ccec42b3",
+        "android_client_info": {
+          "package_name": "com.krayrr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "69136212157-oku0pi061dkqomgudqrbrc4monr8a8f8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.krayrr",
+            "certificate_hash": "8f3c4088ade3f8f6d9ac3df83d44dd546f9cb225"
+          }
+        },
+        {
+          "client_id": "69136212157-r9bccdhvsd06qfjll4c49fqgrbt302vt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJxlarxr_U_6NOFg40XKAsey3gyiO55Pw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "69136212157-r9bccdhvsd06qfjll4c49fqgrbt302vt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

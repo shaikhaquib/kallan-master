@@ -1,0 +1,7 @@
+#Internal package file, do not edit.
+#Sat Feb 02 14:37:34 IST 2019
+0.baseType=DIRECTORY
+0.base=D\:\\kallan-master\\kallan-master\\app\\build\\intermediates\\transforms\\dexMerger\\release\\0
+0.path=classes.dex
+0.set=DEX
+count=1
