@@ -11,64 +11,116 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        android:layout_weight="1" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="130dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/gradiant">
-
-
+        android:background="#5576b9">
 
         <RelativeLayout
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:layout_gravity="center|center_horizontal"
-            android:background="@drawable/border">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_krayrr_kms_design_01">
 
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:id="@+id/tlDist"
-                    android:gravity="center"
-                    android:text="0.0 KM"
-                    android:textStyle="bold"
-                    android:textSize="16dp"
-                    android:textColor="#0a3179"
-                    />
-
-                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="30dp"
+                    android:textSize="12sp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/sourcesanspro_regular"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:text="Total \n Distance"
-                    android:background="@drawable/halfcircle"/>
+                    android:text="0240000"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="11dp"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:text="Total\nKMs"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:textColor="#303F9F"
+                    android:textStyle="bold" />
 
 
+            </RelativeLayout>
 
-            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="26dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_krayrr_kms_design_01">
 
 
+                <TextView
+                    android:id="@+id/calcualteAMount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="30dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:gravity="center"
+                    android:text="0240000"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginBottom="24dp"
+                    android:fontFamily="@font/sourcesanspro_regular"
+                    android:gravity="center"
+                    android:text="Earning"
+                    android:textColor="#303F9F"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+            </RelativeLayout>
 
         </RelativeLayout>
+
+
+
 
 
 
@@ -87,33 +139,32 @@
 
 
     <RelativeLayout
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        android:layout_gravity="center|center_horizontal"
+        android:layout_marginBottom="100dp"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="#ec5e54"
         android:background="@drawable/border">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
             android:orientation="vertical">
 
 
             <TextView
+                android:id="@+id/mapStop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:id="@+id/mapStop"
                 android:gravity="center"
-                android:text="STOP"
                 android:onClick="stop"
-                android:textStyle="bold"
+                android:text="STOP"
+                android:textColor="#FFFFFF"
                 android:textSize="16dp"
-                android:textColor="#0a3179"
-                />
-
-
+                android:textStyle="bold" />
 
 
         </LinearLayout>
@@ -121,5 +172,6 @@
 
 
     </RelativeLayout>
+
 
 </RelativeLayout>

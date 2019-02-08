@@ -44,6 +44,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationServices;
@@ -90,7 +91,7 @@ public class StartActivity extends AppCompatActivity
         db=new SQLiteHandler(this);
         sessionManager=new SessionManager(this);
         getSupportActionBar().setTitle(Global.campaign_name);
-        getSupportActionBar().setSubtitle(Global.Date(Global.camp_start_date) + " -- " + Global.Date(Global.camp_end_date));
+        getSupportActionBar().setSubtitle(Global.Date(Global.camp_start_date) + " TO " + Global.Date(Global.camp_end_date));
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -98,7 +99,7 @@ public class StartActivity extends AppCompatActivity
         mapFrag.getMapAsync(this);
 
 
-        CardView btnStart = findViewById(R.id.starbutton);
+        RelativeLayout btnStart = findViewById(R.id.starbutton);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

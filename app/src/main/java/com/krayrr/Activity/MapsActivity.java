@@ -30,6 +30,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,7 +92,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationRequest mLocationRequest;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-    TextView Distance;
+   TextView Distance,calcualteAMount;
     FusedLocationProviderClient mFusedLocationClient;
     double lat1;
     double lon1;
@@ -120,7 +121,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Distance=findViewById(R.id.tlDist);
-         progressDialog = new ProgressDialog(MapsActivity.this);
+        calcualteAMount=findViewById(R.id.calcualteAMount);
+        progressDialog = new ProgressDialog(MapsActivity.this);
 
         startService(new Intent(getApplicationContext(),SensorService.class));
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -130,7 +132,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         db= new SQLiteHandler(this);
         sessionManager = new SessionManager(this);
         getSupportActionBar().setTitle(Global.campaign_name);
-        getSupportActionBar().setSubtitle(Global.Date(Global.camp_start_date) + " -- " + Global.Date(Global.camp_end_date));
+        getSupportActionBar().setSubtitle(Global.Date(Global.camp_start_date) + " TO " + Global.Date(Global.camp_end_date));
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -220,13 +222,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void updateCordinate() {
 
-        progressDialog.setMessage("Uploading..");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+
         StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.UpdateRoot, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progressDialog.dismiss();
 
 
                 try {
@@ -247,7 +246,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
 
             }
         }){            @Override
@@ -326,6 +324,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        super.onActionModeFinished(mode);
+    }
 
     @Override
     protected void onDestroy() {
@@ -542,8 +544,11 @@ float bearing = myLocation.getBearing();
 
         System.out.println("Distance :-" + getTripDistance(polygon));
         list.add( getTripDistance(polygon));
-        Distance.setText(String.valueOf(df.format(sum(list)/1000)).replace("-","")+" KM");
+        Distance.setText(String.valueOf(df.format(sum(list)/1000)).replace("-",""));
 
+        double Km = Double.parseDouble(String.valueOf(df.format(sum(list)/1000)).replace("-",""));
+        double totalEarning = Km * 1.16;
+        calcualteAMount.setText(String.valueOf(df.format(totalEarning)));
 
 
         //   int KM =( /1000);
