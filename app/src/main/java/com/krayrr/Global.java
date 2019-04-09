@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +18,26 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.krayrr.Activity.MainActivity;
+import com.krayrr.Helper.API;
+import com.krayrr.Helper.AppController;
+import com.krayrr.Helper.DbHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -44,6 +59,8 @@ public class Global {
     public static String Sessionid = null;
     public static String client_id = null;
     public static String campaign_id = null;
+    public static String ride_id     = null;
+    public static String car_id     = null;
     public static String campaign_name  = null;
     public static String camp_start_date= null;
     public static String camp_end_date  = null;
@@ -181,5 +198,70 @@ public class Global {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
+
+
+    public static void car_ride_start(final String strlocation) {
+
+
+
+        StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.car_ride_start, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try {
+                    JSONObject object= new JSONObject(response);
+                    if (object.getBoolean("status")){
+                        Log.d("Start Ride",response);
+
+                        JSONObject jsonObject = object.getJSONArray("ride_details").getJSONObject(0);
+
+
+                        Global.mobile=jsonObject.getString("active_mobile_no");
+                        Global.car_id=jsonObject.getString("ride_id");
+                        Global.carno=jsonObject.getString("car_no");
+                        Global.Sessionid=jsonObject.getString("session_id");
+                        Global.ride_id=jsonObject.getString("ride_id");
+
+
+
+                        //   Global.successDilogue(MapsActivity.this,object.getString("success_msg"));
+
+                       //Toast.makeText(context, "Data Successfully uploaded", Toast.LENGTH_SHORT).show();
+                       // sqLiteHandler.deleteride();
+                    }else{
+                      //  Global.successDilogue(context,object.getString("error_msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){            @Override
+        protected Map<String, String> getParams() throws AuthFailureError {
+
+            Map<String, String>  params = new HashMap<String, String>();
+
+            params.put("user_id"         , Global.uid);
+            params.put("session_id"      , Global.Sessionid);
+            params.put("campaign_id"     , Global.campaign_id);
+            params.put("car_no"          , Global.carno);
+            params.put("active_mobile_no", Global.mobile);
+            params.put("live_coordinate" , strlocation);
+            params.put("status"          ,"start");
+            params.put("kilometer"       ,"0");
+
+            return params;
+        }};
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+
+    }
+
 
 }

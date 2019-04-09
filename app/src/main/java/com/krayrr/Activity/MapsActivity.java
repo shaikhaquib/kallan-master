@@ -12,7 +12,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Interpolator;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -92,7 +91,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationRequest mLocationRequest;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-   TextView Distance,calcualteAMount;
+    TextView Distance,calcualteAMount,mapStop;
     FusedLocationProviderClient mFusedLocationClient;
     double lat1;
     double lon1;
@@ -105,11 +104,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Handler mHandler = new Handler();
     SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
     ProgressDialog progressDialog;
+    Boolean isStarted = false;
+    String strlocation;
     Runnable mHandlerTask = new Runnable()
     {
         @Override
         public void run() {
-            updateCordinate();
+            live_ride_record();
             mHandler.postDelayed(mHandlerTask, INTERVAL);
         }
     };
@@ -121,6 +122,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         Distance=findViewById(R.id.tlDist);
+        mapStop=findViewById(R.id.mapStop);
         calcualteAMount=findViewById(R.id.calcualteAMount);
         progressDialog = new ProgressDialog(MapsActivity.this);
 
@@ -149,13 +151,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 //     Toast.makeText(getApplicationContext(),"CAR Total Distance KM :-"+ getResults(),Toast.LENGTH_LONG).show();
 
-                updateCordinate();
+                live_ride_record();
 
             }
         });
 
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                mHandlerTask.run();
+            }
+        }, 5000);
+
         mHandlerTask.run();
 
+        mapStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                car_ride_stop();
+            }
+        });
 
     }
 
@@ -220,7 +237,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    private void updateCordinate() {
+    private void live_ride_record() {
 
 
         StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.UpdateRoot, new Response.Listener<String>() {
@@ -232,6 +249,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     JSONObject object= new JSONObject(response);
                     if (object.getBoolean("status")){
                         //   Global.successDilogue(MapsActivity.this,object.getString("success_msg"));
+                        Log.d("Start Ride",response);
 
                         Toast.makeText(MapsActivity.this, "Data Successfully uploaded", Toast.LENGTH_SHORT).show();
                         sqLiteHandler.deleteride();
@@ -255,12 +273,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             params.put("user_id"        , Global.uid);
             params.put("session_id"     , Global.Sessionid);
+            params.put("ride_id"        , Global.ride_id);
             params.put("campaign_id"    , Global.campaign_id);
-            params.put("car_no"         , Global.carno);
-            params.put("phone_no"       , Global.mobile);
-            params.put("root_coordinate", String.valueOf(getResults()));
-            params.put("date"           , Global.getDateCurrentTimeZone());
-            params.put("kilometer"      ,String.valueOf(df.format(sum(list)/1000)).replace("-",""));
+            params.put("live_coordinate", strlocation);
+            params.put("status"         , "stop");
+            params.put("ride_kilometer" , String.valueOf(df.format(sum(list)/1000)).replace("-",""));
 
             return params;
         }};
@@ -302,7 +319,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(120000); // two minute interval
         mLocationRequest.setFastestInterval(120000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -332,7 +349,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        updateCordinate();
+        live_ride_record();
+        car_ride_stop();
     }
 
     private void DrawPath(double latitude, double longitude) {
@@ -367,7 +385,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 public void onLocationChanged(Location myLocation) {
 
                     final double latitude = myLocation.getLatitude();
-float bearing = myLocation.getBearing();
+        float bearing = myLocation.getBearing();
 
 
                     final double longitude = myLocation.getLongitude();
@@ -428,16 +446,18 @@ float bearing = myLocation.getBearing();
                 if (mCurrLocationMarker != null) {
                     mCurrLocationMarker.remove();
                 }
+                strlocation = String.valueOf(location.getLatitude()).concat(" ").concat(String.valueOf(location.getLongitude()));
 
                 DrawPath( location.getLatitude(), location.getLongitude());
 
                 //Place current location marker
+
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
                 mCurrLocationMarker = mGoogleMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title("My Location")
-                        .icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_krayrr_car_icon_01)));
+                        .icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_green_car_marker)));
             }
         }
     };
@@ -630,11 +650,18 @@ float bearing = myLocation.getBearing();
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Drawable drawable = ContextCompat.getDrawable(context, vectorResId);
+        drawable.setBounds(
+                0,
+                0,
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.draw(canvas);
+        drawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
     static public void rotateMarker(final Marker marker, final float toRotation) {
@@ -686,4 +713,57 @@ float bearing = myLocation.getBearing();
         dialog.getWindow().setAttributes(lp);
 
     }
+
+
+    private void car_ride_stop() {
+
+
+        StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.UpdateRoot, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try {
+                    JSONObject object= new JSONObject(response);
+                    if (object.getBoolean("status")){
+                        //   Global.successDilogue(MapsActivity.this,object.getString("success_msg"));
+                        Log.d("Start Ride",response);
+
+                        Toast.makeText(MapsActivity.this, "Data Successfully uploaded", Toast.LENGTH_SHORT).show();
+                        sqLiteHandler.deleteride();
+                    }else{
+                        Global.successDilogue(MapsActivity.this,object.getString("error_msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){            @Override
+        protected Map<String, String> getParams() throws AuthFailureError {
+
+            Map<String, String>  params = new HashMap<String, String>();
+
+            params.put("user_id"        , Global.uid);
+            params.put("session_id"     , Global.Sessionid);
+            params.put("ride_id"        , Global.ride_id);
+            params.put("campaign_id"    , Global.campaign_id);
+            params.put("live_coordinate", strlocation);
+            params.put("status"         , "stop");
+            params.put("ride_kilometer" , String.valueOf(df.format(sum(list)/1000)).replace("-",""));
+
+            return params;
+        }};
+
+        AppController.getInstance().addToRequestQueue(stringRequest);
+
+    }
+
+
+
 }

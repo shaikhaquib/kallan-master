@@ -251,24 +251,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user = db.getUserDetails();
       //  Global.id = user.get("id");
       //  Log.d("VAr",Global.id);
-        Global.uid  = user.get("uid");
-        Log.d("VAr",Global.uid);
-        Global.ltype  = user.get("ltype");
-        Log.d("VAr",Global.ltype);
-        Global.email  = user.get("email");
-        Log.d("VAr",Global.email);
-        Global.mobile = user.get("mobile");
-        Log.d("VAr",Global.mobile);
+        Global.uid      = user.get("uid");
+        Global.ltype    = user.get("ltype");
+        Global.email    = user.get("email");
+        Global.mobile   = user.get("mobile");
         Global.username = user.get("username");
-        Log.d("VAr",Global.username);
         Global.carregno = user.get("carregno");
-        Log.d("VAr",Global.carregno);
         Global.fueltype = user.get("fueltype");
-        Log.d("VAr",Global.fueltype);
         Global.carno    = user.get("carno");
-        Log.d("VAr",Global.carno);
-        Global.Sessionid    = user.get("sessionid");
-        Log.d("VAr",Global.Sessionid);
+        Global.Sessionid= user.get("sessionid");
     }
 
 }

@@ -16,7 +16,7 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="605dp"
         android:layout_weight="1" />
 
 
@@ -55,7 +55,7 @@
                     android:fontFamily="@font/sourcesanspro_regular"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:text="0240000"
+                    android:text="00"
                     android:textStyle="bold" />
 
                 <TextView
@@ -97,7 +97,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/sourcesanspro_regular"
                     android:gravity="center"
-                    android:text="0240000"
+                    android:text="00"
                     android:textStyle="bold" />
 
                 <TextView
@@ -138,40 +138,26 @@
         android:text="get Distance" />
 
 
-    <RelativeLayout
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="100dp"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="#ec5e54"
-        android:background="@drawable/border">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
 
 
             <TextView
                 android:id="@+id/mapStop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:onClick="stop"
                 android:text="STOP"
                 android:textColor="#FFFFFF"
                 android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="100dp"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="#ec5e54"
+                android:background="@drawable/border"/>
 
-
-        </LinearLayout>
-
-
-
-    </RelativeLayout>
 
 
 </RelativeLayout>

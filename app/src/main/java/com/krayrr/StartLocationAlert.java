@@ -24,8 +24,8 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 
 /**
- * Created by Anirudh on 20/07/16.
- */
+ * Created by AquibShaikh on 20/07/18.
+ **/
 public class StartLocationAlert implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
     Activity context;
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;

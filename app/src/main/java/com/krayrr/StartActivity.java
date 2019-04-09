@@ -1,34 +1,30 @@
 package com.krayrr;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,17 +34,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.krayrr.Activity.Conatct;
 import com.krayrr.Activity.LoginActivity;
 import com.krayrr.Activity.MapsActivity;
@@ -56,13 +41,8 @@ import com.krayrr.Helper.DbHelper;
 import com.krayrr.Helper.SQLiteHandler;
 import com.krayrr.Helper.SessionManager;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class StartActivity extends AppCompatActivity
         implements OnMapReadyCallback {
@@ -79,6 +59,9 @@ public class StartActivity extends AppCompatActivity
     List<Float> list = new ArrayList<>();
     SQLiteHandler db ;
     SessionManager sessionManager;
+    RelativeLayout btnStart;
+
+    String strLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +82,7 @@ public class StartActivity extends AppCompatActivity
         mapFrag.getMapAsync(this);
 
 
-        RelativeLayout btnStart = findViewById(R.id.starbutton);
+        btnStart = findViewById(R.id.starbutton);
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +90,8 @@ public class StartActivity extends AppCompatActivity
                // Log.d("DATA :" , String.valueOf(getResults()));
 
                 startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+
+                Global.car_ride_start(strLocation);
             }
         });
     }
@@ -231,6 +216,8 @@ public class StartActivity extends AppCompatActivity
 
                 //Place current location marker
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                strLocation = String.valueOf(location.getLatitude()).concat(" ").concat(String.valueOf(location.getLongitude()));
+
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Current Position");
