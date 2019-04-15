@@ -205,7 +205,7 @@ ADDED from C:\Users\Digital\Desktop\kallan-master\app\src\main\AndroidManifest.x
 	android:name
 		ADDED from C:\Users\Digital\Desktop\kallan-master\app\src\main\AndroidManifest.xml:30:23-60
 activity#com.krayrr.Activity.LoginActivity
-ADDED from C:\Users\Digital\Desktop\kallan-master\app\src\main\AndroidManifest.xml:32:9-35:81
+ADDED from C:\Users\Digital\Desktop\kallan-master\app\src\main\AndroidManifest.xml:32:9-35:71
 	android:label
 		ADDED from C:\Users\Digital\Desktop\kallan-master\app\src\main\AndroidManifest.xml:34:13-56
 	android:theme

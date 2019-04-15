@@ -240,7 +240,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void live_ride_record() {
 
 
-        StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.UpdateRoot, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.live_ride_record, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -276,7 +276,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             params.put("ride_id"        , Global.ride_id);
             params.put("campaign_id"    , Global.campaign_id);
             params.put("live_coordinate", strlocation);
-            params.put("status"         , "stop");
             params.put("ride_kilometer" , String.valueOf(df.format(sum(list)/1000)).replace("-",""));
 
             return params;
@@ -718,7 +717,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void car_ride_stop() {
 
 
-        StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.UpdateRoot, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(StringRequest.Method.POST, API.car_ride_stop, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 

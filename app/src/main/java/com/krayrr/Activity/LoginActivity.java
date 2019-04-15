@@ -390,6 +390,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
 
                 int response_code = conn.getResponseCode();
+                Log.d("responce Code",String.valueOf(response_code));
 
                 // Check if successful connection made
                 if (response_code == HttpURLConnection.HTTP_OK) {
